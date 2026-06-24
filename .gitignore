@@ -1,0 +1,14 @@
+# build成果物
+*.o
+*.d
+app
+*.out
+*.exe
+
+# ビルドディレクトリ
+build/
+cmake-build-*/
+
+# OSゴミ
+.DS_Store
+Thumbs.db
