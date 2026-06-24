@@ -1,33 +1,44 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 
-# OpenSSL
 OPENSSL_CFLAGS := $(shell pkg-config --cflags openssl)
 OPENSSL_LIBS   := $(shell pkg-config --libs openssl)
 
-CXXFLAGS += $(OPENSSL_CFLAGS)
-
 TARGET = app
 
-SRCS = main.cpp usage.cpp
-OBJS = $(SRCS:.cpp=.o)
+# ディレクトリ構成
+SRC_DIR = src
+INC_DIR = include
+BUILD_DIR = build
 
-# ★依存ファイル（.d）を自動生成
+# ソース
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+
+# オブジェクト
+OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
+
+# 依存ファイル
 DEPS = $(OBJS:.o=.d)
+
+# インクルードパス
+CXXFLAGS += -I$(INC_DIR) $(OPENSSL_CFLAGS)
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(OPENSSL_LIBS)
 
-# ★ここが重要（依存関係付きコンパイル）
-%.o: %.cpp
+# ★ buildディレクトリに出力
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 
-# ★依存ファイルを読み込む
+# buildディレクトリ作成
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
 -include $(DEPS)
 
 clean:
-	rm -f $(OBJS) $(DEPS) $(TARGET)
+	rm -rf $(BUILD_DIR) $(TARGET)
 
 re: clean all

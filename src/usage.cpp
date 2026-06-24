@@ -1,4 +1,4 @@
-#include "usage.hpp"
+#include "../include/usage.hpp"
 #include <iostream>
 
 auto usage(const std::filesystem::path& program_path) -> void {

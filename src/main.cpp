@@ -1,8 +1,8 @@
 #include <iostream>
 #include <unistd.h>
 #include <string>
-#include "OpenSSLData.hpp"
-#include "usage.hpp"
+#include "../include/OpenSSLData.hpp"
+#include "../include/usage.hpp"
 
 int main (int argc, char* argv[]){
     int opt;
