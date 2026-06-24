@@ -3,13 +3,17 @@
 #include <string>
 #include "../include/OpenSSLData.hpp"
 #include "../include/CommandLine.hpp"
+#include "../include/Printer.hpp"
+#include "../include/Crypto.hpp"
 
 int main (int argc, char* argv[]){
     const auto program_path = argv[0];
     byte_stream iv(BLOCK_SIZE, 0);
     byte_stream key(128 / 8, 0);
     int opt;
-    // -hオプションを追加するためにgetopt関数を使用
+    ///////////////
+    // オプション処理
+    ///////////////
     while((opt = getopt(argc, argv, "hi:k:V")) != -1 ){
         switch( opt ){
             case 'h':   // ヘルプオプション
@@ -52,6 +56,19 @@ int main (int argc, char* argv[]){
         }
     }
 
+    ///////////////
+    // データの入力
+    ///////////////
+    byte_stream data;
+    while (true) {
+        auto byte_value = getc(stdin);
+        if (byte_value == EOF) {
+            break;
+        }
+        data.emplace_back(byte_value);
+    }
+    
+
     if( argc - optind < 1 ){
         std::cerr << "no subcommand" << std::endl;
         return 1;
@@ -62,12 +79,43 @@ int main (int argc, char* argv[]){
         usage(program_path);
         return 0;
     }
-    if( subcommand == "enc" ){
-
-    }else if( subcommand == "dec" ){
-
-    }else{
-        std::cerr << "unknown command: " << subcommand << std::endl;
+    try{
+        if( subcommand == "enc" ){
+            switch (key.size() * 8) {
+                case 128:
+                    print_data_while_encoding<128>(key, data, iv, encrypt<128>);
+                    break;
+                case 192:
+                    print_data_while_encoding<192>(key, data, iv, encrypt<192>);
+                    break;
+                case 256:
+                    print_data_while_encoding<256>(key, data, iv, encrypt<256>);
+                    break;
+                default:
+                    std::cout << "invalid key type" << std::endl;
+                    break;
+            }
+        }else if( subcommand == "dec" ){
+            switch (key.size() * 8) {
+                case 128:
+                    print_data_while_encoding<128>(key, data, iv, decrypt<128>);
+                    break;
+                case 192:
+                    print_data_while_encoding<192>(key, data, iv, decrypt<192>);
+                    break;
+                case 256:
+                    print_data_while_encoding<256>(key, data, iv, decrypt<256>);
+                    break;
+                default:
+                    std::cout << "invalid key type" << std::endl;
+                    break;
+            }
+        }else{
+            std::cerr << "unknown command: " << subcommand << std::endl;
+            return 1;
+        }
+    }catch(const char* error) {
+        std::cerr << error << std::endl;
         return 1;
     }
 }

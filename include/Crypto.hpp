@@ -5,7 +5,8 @@
 #define _CRYPTO_HPP_
 
 // 暗号化
-template <size_t key_size, enable_if_valid_key<key_size> = nullptr>
+template <size_t key_size>
+requires AESKeySize<key_size>
 byte_stream encrypt(
     const key<key_size>& key,
     const byte_stream& data,
@@ -13,11 +14,14 @@ byte_stream encrypt(
 );
 
 // 復号化
-template <size_t key_size, enable_if_valid_key<key_size> = nullptr>
+template <size_t key_size>
+requires AESKeySize<key_size>
 byte_stream decrypt(
     const key<key_size>& key,
     const byte_stream& data,
     const iv& iv
 );
+
+#include "../include/Crypto.tpp"
 
 #endif // _CRYPTO_HPP_
