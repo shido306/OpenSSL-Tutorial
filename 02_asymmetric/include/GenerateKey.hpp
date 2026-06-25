@@ -7,6 +7,12 @@
 // ************************************************************************/ 
 
 ////////////////////////////
+// インクルードガード
+////////////////////////////
+#ifndef _GENERATE_KEY_HPP_
+#define _GENERATE_KEY_HPP_
+
+////////////////////////////
 // インクルード
 ////////////////////////////
 #include <filesystem>
@@ -21,3 +27,5 @@ void generateKeypair(
     const std::string& pub_path,    // in: 公開鍵ファイルパス
     int bits                        // in: 鍵のビット数
 );
+
+#endif // _GENERATE_KEY_HPP_
