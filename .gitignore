@@ -9,6 +9,9 @@ app
 build/
 cmake-build-*/
 
+# 生成物を格納するディレクトリ
+generate/
+
 # OSゴミ
 .DS_Store
 Thumbs.db

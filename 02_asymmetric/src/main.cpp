@@ -12,6 +12,7 @@
 #include <iostream>
 #include <unistd.h>
 #include "../include/CommandLine.hpp"
+#include "../include/GenerateKey.hpp"
 
 ////////////////////////////
 // 関数定義
@@ -40,6 +41,20 @@ int main (int argc, char* argv[]){
     if( subcommand == "help" ){
         usage(program_path);
         return 0;
+    }
+
+    try{
+        if( subcommand == "keygen" ){
+            std::string priv_path = "generate/private.key";     // 秘密鍵のパス：デフォルト
+            std::string pub_path  = "generate/public.key";      // 公開鍵のパス：デフォルト
+            int bits = 2048;                                    // 鍵のビット数：デフォルト
+
+            // 鍵のペアを出力
+            generateKeypair(priv_path, pub_path, bits);
+        }
+    }catch(const char* error) {
+        std::cerr << error << std::endl;
+        return 1;
     }
 
     return 0;

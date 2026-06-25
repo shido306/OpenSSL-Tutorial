@@ -26,10 +26,13 @@ void usage(
         << "OpenSSLライブラリのRSA公開鍵暗号方式の使用方法のサンプル"        << std::endl
         << "Usage:"                                       << std::endl
         << "  " << program_name << " help"                << std::endl
+        << "  " << program_name << " keygen"              << std::endl
         << "  " << program_name << " -h"                  << std::endl
         << "Arguments:"                                   << std::endl
         << "  help"                                       << std::endl
         << "    ヘルプを表示する"                         << std::endl
+        << "  keygen"                                     << std::endl
+        << "    キーを生成する"                           << std::endl
         << "Options:"                                     << std::endl
         << "  -h"                                         << std::endl
         << "    ヘルプを表示する"                         << std::endl;
