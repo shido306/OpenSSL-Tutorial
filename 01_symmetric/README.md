@@ -1,4 +1,4 @@
-# OpenSSL-Tutorial
+# 01 AES-256-CBC共通鍵暗号方式
 
 OpenSSLライブラリを使用したAES-256-CBC暗号化・復号化プログラムです。
 

@@ -1,4 +1,4 @@
-# OpenSSL-Tutorial
+# 02 RSA公開鍵暗号方式
 
 OpenSSLライブラリを使用したRSA公開鍵暗号方式のサンプルプログラムです。
 
