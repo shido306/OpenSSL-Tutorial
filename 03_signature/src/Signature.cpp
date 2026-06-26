@@ -131,3 +131,107 @@ void signData(
  
     std::cerr << "[sign] 署名ファイル: " << sig_path << "\n";
 }
+
+// 公開鍵で署名を検証
+void verifyData(
+    const std::string& pub_path,    // in: 公開鍵ファイルパス
+    const std::string& sig_path     // in: 署名ファイルパス
+){
+    //==========================
+    // 公開鍵ファイルの読み込み
+    //==========================
+    FILE* pub_file = fopen(pub_path.c_str(), "rb");
+    if( pub_file == nullptr ){
+        throw "cannot read public key file";
+    }
+
+    //==========================
+    // 公開鍵の読み込み
+    //==========================
+    EVP_PKEY *pkey = PEM_read_PUBKEY(pub_file, nullptr, nullptr, nullptr);
+    fclose(pub_file);
+
+    if( pkey == nullptr ){
+        throw "cannot read public key";
+    }
+
+    //==========================
+    // 署名のコンテキストを作成
+    //==========================
+    EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
+    if( mdctx == nullptr ){
+        EVP_PKEY_free(pkey);
+        throw "cannot create message digest context";
+    }
+
+    //==========================
+    // 署名の初期化
+    //==========================
+    // EVP_DigestVerifyInit関数は、署名検証操作を初期化する。
+    // 各引数はEVP_DigestSignInit関数と同様。
+    //==========================
+    if( EVP_DigestVerifyInit(mdctx, nullptr, EVP_sha256(), nullptr, pkey) <= 0 ){
+        EVP_MD_CTX_free(mdctx);
+        EVP_PKEY_free(pkey);
+        throw "cannot initialize signature verification context";
+    }
+
+    EVP_PKEY_free(pkey);    // pkeyは不要になったので解放する
+
+    //==========================
+    // stdinからバイナリデータを読み込む
+    //==========================
+    auto msg = read_stdin();
+    if( msg.empty() ){
+        EVP_MD_CTX_free(mdctx);
+        throw "input data is empty";
+    }
+
+    //==========================
+    // メッセージのハッシュ値を計算する
+    //==========================
+    // EVP_DigestVerifyUpdate関数は、署名検証するメッセージを渡してハッシュ値を計算する。
+    // 第一引数のmdctxは署名のコンテキスト
+    // 第二引数のmsg.data()は署名するメッセージのデータ
+    // 第三引数のmsg.size()は署名するメッセージのサイズ
+    // ※ EVP_DigestVerifyUpdate関数は、複数回呼び出すことができる。複数回呼び出すことで、メッセージを分割して渡すことができる。
+    //==========================
+    if( EVP_DigestVerifyUpdate(mdctx, msg.data(), msg.size()) <= 0 ){
+        EVP_MD_CTX_free(mdctx);
+        throw "cannot update DigestVerify";
+    }
+
+    //==========================
+    // 署名ファイルの読み込み
+    //==========================
+    std::ifstream sig_file(sig_path, std::ios::binary);
+    if( !sig_file ){
+        EVP_MD_CTX_free(mdctx);
+        throw "cannot open signature file for reading";
+    }
+    std::vector<unsigned char> sig(
+        (std::istreambuf_iterator<char>(sig_file)),
+        std::istreambuf_iterator<char>()
+    );
+
+    //==========================
+    // 署名の検証
+    //==========================
+    // EVP_DigestVerifyFinal関数は、署名を検証する。
+    // 第一引数のmdctxは署名のコンテキスト
+    // 第二引数のsig.data()は署名のデータ
+    // 第三引数のsig.size()は署名のサイズ
+    // 戻り値が1の場合は署名が正しい、0の場合は署名が不正、負の値の場合はエラーが発生したことを示す。
+    //==========================
+    int result = EVP_DigestVerifyFinal(mdctx, sig.data(), sig.size());
+    EVP_MD_CTX_free(mdctx);     // 署名のコンテキストを解放する。
+
+    if( result == 1 ){
+        std::cout << "OK" << "\n";
+    } else if( result == 0 ){
+        std::cout << "NG" << "\n";
+        throw "signature verification failed";
+    } else {
+        throw "error during signature verification";
+    }
+}

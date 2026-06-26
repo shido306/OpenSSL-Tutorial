@@ -33,6 +33,8 @@ void usage(
         << "    ヘルプを表示する"                         << std::endl
         << "  sign"                                       << std::endl
         << "    データに署名を生成する"                   << std::endl
+        << "  verify"                                     << std::endl
+        << "    データの署名を検証する"                   << std::endl
         << "Options:"                                     << std::endl
         << "  -h"                                         << std::endl
         << "    ヘルプを表示する"                         << std::endl

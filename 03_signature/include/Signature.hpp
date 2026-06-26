@@ -26,4 +26,10 @@ void signData(
     const std::string& sig_path     // in: 署名ファイル出力パス
 );
 
+// 公開鍵で署名を検証
+void verifyData(
+    const std::string& pub_path,    // in: 公開鍵ファイルパス
+    const std::string& sig_path     // in: 署名ファイルパス
+);
+
 #endif // _SIGNATURE_HPP_

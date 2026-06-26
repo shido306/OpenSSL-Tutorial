@@ -59,6 +59,8 @@ int main (int argc, char* argv[]){
     try{
         if( subcommand == "sign" ){
             signData(priv_path, sig_path);
+        }else if( subcommand == "verify" ){
+            verifyData(pub_path, sig_path);
         }
     }catch(const char* error) {
         std::cerr << error << std::endl;
