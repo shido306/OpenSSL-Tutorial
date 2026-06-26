@@ -25,4 +25,9 @@ void encryptPubKey(
     const std::string& pub_path     // in: 公開鍵ファイルパス
 );
 
+// 秘密鍵で復号化
+void decryptPrivKey(
+    const std::string& priv_path    // in: 秘密鍵ファイルパス
+);
+
 #endif // _CRYPTO_HPP_

@@ -63,6 +63,9 @@ int main (int argc, char* argv[]){
         }else if( subcommand == "enc" ){
             // 公開鍵で暗号化
             encryptPubKey(pub_path);
+        }else if( subcommand == "dec" ){
+            // 秘密鍵で復号化
+            decryptPrivKey(priv_path);
         }
     }catch(const char* error) {
         std::cerr << error << std::endl;
