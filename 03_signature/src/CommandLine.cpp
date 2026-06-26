@@ -31,11 +31,15 @@ void usage(
         << "Arguments:"                                   << std::endl
         << "  help"                                       << std::endl
         << "    ヘルプを表示する"                         << std::endl
+        << "  sign"                                       << std::endl
+        << "    データに署名を生成する"                   << std::endl
         << "Options:"                                     << std::endl
         << "  -h"                                         << std::endl
         << "    ヘルプを表示する"                         << std::endl
         << "  -p"                                         << std::endl
         << "    公開鍵ファイルのパスを指定する"           << std::endl
         << "  -s"                                         << std::endl
-        << "    秘密鍵ファイルのパスを指定する"              << std::endl;
+        << "    秘密鍵ファイルのパスを指定する"              << std::endl
+        << "  -S"                                         << std::endl
+        << "    署名ファイルのパスを指定する"              << std::endl;
 }
