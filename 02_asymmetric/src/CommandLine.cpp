@@ -33,7 +33,17 @@ void usage(
         << "    ヘルプを表示する"                         << std::endl
         << "  keygen"                                     << std::endl
         << "    キーを生成する"                           << std::endl
+        << "  enc"                                     << std::endl
+        << "    公開鍵で暗号化する"                         << std::endl
+        << "  dec"                                     << std::endl
+        << "    秘密鍵で復号化する"                         << std::endl
         << "Options:"                                     << std::endl
         << "  -h"                                         << std::endl
-        << "    ヘルプを表示する"                         << std::endl;
+        << "    ヘルプを表示する"                         << std::endl
+        << "  -p"                                         << std::endl
+        << "    公開鍵ファイルのパスを指定する"           << std::endl
+        << "  -s"                                         << std::endl
+        << "    秘密鍵ファイルのパスを指定する"              << std::endl
+        << "  -b"                                         << std::endl
+        << "    鍵のビット数を指定する"                       << std::endl;
 }
